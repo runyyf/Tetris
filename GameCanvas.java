@@ -16,6 +16,13 @@ public class GameCanvas extends Canvas {
         columnNum = 12;
         unitSize = 30;
 
+        //初始化数组
+        for (int i = 0;i<20;i++){
+            for (int j = 0;j<20;j++){
+                canvasArray[i][j] = 0 ;
+            }
+        }
+
     }
 
 
@@ -23,7 +30,6 @@ public class GameCanvas extends Canvas {
         for (int i = 0; i < rowNum; i++)
             for (int j = 0; j < columnNum; j++)
                 drawUnit(i, j, canvasArray[i][j]);
-
     }
 
     public void drawUnit(int row, int col, int type) {

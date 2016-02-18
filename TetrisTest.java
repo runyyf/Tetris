@@ -23,7 +23,7 @@ public class TetrisTest implements Runnable{
         jFrame = new JFrame("俄罗斯方块 v1.0  ");
 
         //init windows
-        jFrame.setSize(620,480);
+        jFrame.setSize(620,490);
         jFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         jFrame.setLocation(350,100);
         jFrame.setLayout(new GridLayout(1,2));
@@ -93,6 +93,12 @@ public class TetrisTest implements Runnable{
 
     public void run(){
         while (true){
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
             if (Block.isBlockStatus() == false){
                 new Thread(new Block(leftScr)).start();
             }
