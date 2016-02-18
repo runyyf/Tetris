@@ -5,8 +5,8 @@ import java.awt.*;
 /**
  * Created by runyyf on 16/2/15.
  */
-public class GameCanvas extends Canvas implements Runnable{
-    static int canvasArray[][];
+public class GameCanvas extends Canvas {
+    static int canvasArray[][]= new int [20][20];
     int rowNum ;
     int columnNum;
     int unitSize;
@@ -14,7 +14,6 @@ public class GameCanvas extends Canvas implements Runnable{
     GameCanvas(){
         rowNum = 15;
         columnNum = 12;
-        canvasArray = new int [20][20];
         unitSize = 30;
 
     }
@@ -44,28 +43,9 @@ public class GameCanvas extends Canvas implements Runnable{
         g.fill3DRect(col * unitSize, getSize().height - (row + 1) * unitSize,
                 unitSize, unitSize, true);
 
-        //g.dispose();
+        g.dispose();
     }
 
-    public void run(){
-        int row = 13;
-        while (true){
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            setUnitState(row,4,1);
-            setUnitState(row-1,4,1);
-            setUnitState(row-2,4,1);
-            setUnitState(row-3,4,1);
-
-            this.repaint();
-            if (row>5){
-                row--;
-            }
-        }
-    }
     public void setUnitState(int row,int column,int state){
         //System.out.println(row+"   "+column+"   "+state);
         canvasArray[row][column] = state;

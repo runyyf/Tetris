@@ -6,23 +6,24 @@ import java.awt.event.WindowAdapter;
 /**
  * Created by runyyf on 16/2/14.
  */
-public class TetrisTest {
+public class TetrisTest implements Runnable{
     JFrame jFrame;
     public static TextField scoreField, levelField;
     public static int level = 1,score = 0;
-    static GameCanvas leftScr = new GameCanvas();
+    GameCanvas leftScr = new GameCanvas();
 
     public static void main(String[] args){
         TetrisTest test = new TetrisTest();
         test.showFrame();
-        new Thread(leftScr).start();
+
+        new Thread(test).start();
     }
 
     public void showFrame(){
-        jFrame = new JFrame();
+        jFrame = new JFrame("俄罗斯方块 v1.0  ");
 
         //init windows
-        jFrame.setSize(600,480);
+        jFrame.setSize(620,480);
         jFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         jFrame.setLocation(350,100);
         jFrame.setLayout(new GridLayout(1,2));
@@ -65,19 +66,19 @@ public class TetrisTest {
         buttonPanel.setLayout(new GridLayout(5,1,0,5));
         rightScr.add(buttonPanel);
 
-        Button playButton = new Button("游戏开始");
+        Button playButton = new Button("game start");
         playButton.setSize(70,200);
 
-        Button levelUpButton = new Button("等级提升");
+        Button levelUpButton = new Button("level up ");
         levelUpButton.setSize(70,200);
 
-        Button levelDownButton = new Button("等级降低");
+        Button levelDownButton = new Button("level down");
         levelDownButton.setSize(70,200);
 
-        Button pauseButton  = new Button("游戏暂停");
+        Button pauseButton  = new Button("game pause");
         pauseButton.setSize(70,200);
 
-        Button quitButton = new Button("游戏结束");
+        Button quitButton = new Button("game over");
         quitButton.setSize(70,200);
 
         buttonPanel.add(playButton);
@@ -90,4 +91,12 @@ public class TetrisTest {
         jFrame.setVisible(true);
     }
 
+    public void run(){
+        while (true){
+            if (Block.isBlockStatus() == false){
+                new Thread(new Block(leftScr)).start();
+            }
+        }
+
+    }
 }
