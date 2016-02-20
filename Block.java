@@ -4,7 +4,10 @@ package Tetris;
  * Created by runyyf on 16/2/17.
  */
 public class Block implements Runnable{
-    int blockType ;
+    static int row ;  // now the falling block's row
+    static int column ;
+
+    static int blockType ;
     /*1=o o o o   2=o    3= o o  4=o o o  5=   o  6=  o    7 =   o
     /               o       o o      o       o o      o o      o o o
     /               o                          o      o
@@ -21,7 +24,7 @@ public class Block implements Runnable{
     Block(GameCanvas scr){
         this.gameScr = scr;
         blockType = (int)(Math.random()*5+1);
-        //blockType = 4;
+        //blockType = 1;
     }
 
     public static boolean isBlockStatus() {
@@ -30,7 +33,7 @@ public class Block implements Runnable{
 
     public synchronized void display(int type,int row,int column,int state){
 
-        if (row>=gameScr.rowNum || column>=gameScr.columnNum){
+        if (row>=gameScr.getRowNum() || column>=gameScr.getColumnNum()){
             return;
         }
 
@@ -39,13 +42,11 @@ public class Block implements Runnable{
             case 1:
                 for (i=0;i<4;i++){
                     gameScr.drawUnit(row,column+i,state);
-                    gameScr.setUnitState(row,column+i,state);
                 }
                 break;
             case 2:
                 for (i=0;i<4;i++){
                     gameScr.drawUnit(row-i,column,state);
-                    gameScr.setUnitState(row-i,column,state);
                 }
                 break;
             case 3:
@@ -120,20 +121,118 @@ public class Block implements Runnable{
         return true;
     }
 
+    public synchronized void moveBlockLeft(){
+        boolean result = false;
+        if (column-1 <0 || blockStatus==false )
+            return;
+        switch (blockType){
+            case 1 :
+                if (GameCanvas.canvasArray[row][column-1] == 0)
+                    result = true;
+                break;
+            case 2:
+                if (GameCanvas.canvasArray[row][column-1]==0 && GameCanvas.canvasArray[row+1][column-1]==0 &&
+                        GameCanvas.canvasArray[row+2][column-1]==0&&GameCanvas.canvasArray[row+3][column-1]==0){
+                    result = true;
+                }
+                break;
+            case 3:
+                if (GameCanvas.canvasArray[row][column-1]==0 && GameCanvas.canvasArray[row+1][column-1]==0){
+                    result = true;
+                }
+                break;
+            case 4:
+                if (GameCanvas.canvasArray[row][column-1]==0 && GameCanvas.canvasArray[row-1][column-1]==0){
+                    result = true;
+                }
+                break;
+            case 5:
+                if (GameCanvas.canvasArray[row][column]==0 && GameCanvas.canvasArray[row-1][column-1]==0&&
+                        GameCanvas.canvasArray[row-2][column]==0){
+                    result = true;
+                }
+                break;
+            default:
+                break;
+        }
+
+        if (result == true){
+            display(blockType,row,column,0);
+            display(blockType,row,column-1,1);
+            column--;
+        }
+
+    }
+
+    public synchronized void moveBlockRight(){
+        boolean result = false;
+        if (blockStatus == false)
+            return;
+        switch (blockType){
+            case 1 :
+                if (column+4>gameScr.getColumnNum()-1)
+                    return;
+                if (GameCanvas.canvasArray[row][column+4] == 0){
+                    result = true;
+                }
+                break;
+            case 2:
+                if (column+1>gameScr.getColumnNum()-1)
+                    return;
+                if (GameCanvas.canvasArray[row][column+1]==0 && GameCanvas.canvasArray[row-1][column+1]==0&&
+                        GameCanvas.canvasArray[row-2][column+1]==0&&GameCanvas.canvasArray[row-3][column+1]==0){
+                    result = true;
+                }
+                break;
+            case 3:
+                if (column+2>gameScr.getColumnNum()-1)
+                    return;
+                if (GameCanvas.canvasArray[row][column+2]==0 && GameCanvas.canvasArray[row-1][column+2]==0) {
+                    result = true;
+                }
+                break;
+            case 4:
+                if (column+3>gameScr.getColumnNum()-1)
+                    return;
+                if (GameCanvas.canvasArray[row][column+3]==0 && GameCanvas.canvasArray[row-1][column+2]==0){
+                    result = true;
+                }
+                break;
+            case 5:
+                if(column+2>gameScr.getColumnNum()-1)
+                    return;
+                if (GameCanvas.canvasArray[row][column+2]==0 && GameCanvas.canvasArray[row-1][column+2]==0&&
+                        GameCanvas.canvasArray[row-2][column+2]==0){
+                    result = true;
+                }
+                break;
+            default:
+                break;
+        }
+
+        if (result == true){
+            display(blockType,row,column,0);
+            display(blockType,row,column+1,1);
+            column++;
+        }
+
+    }
+
+
     public void run(){
-        int row = 14;
-        int column = 4;
+        row = 15;
+        column = 4;
         blockStatus = true;
-        while (true){
+        while (true) {
 
             try {
                 Thread.sleep(500);
             } catch (InterruptedException e) {
 
             }
+            row--;
 
             display(blockType,row+1,column,0);
-
             display(blockType,row  ,column,1);
 
             if (isBlockDown(blockType,row,column) == false){
@@ -141,7 +240,6 @@ public class Block implements Runnable{
                 break;
             }
 
-            row--;
         }
 
         blockStatus = false;

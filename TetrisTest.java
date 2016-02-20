@@ -29,7 +29,7 @@ public class TetrisTest implements Runnable{
         jFrame.setLayout(new GridLayout(1,2));
 
         //加入到主窗口
-        //GameCanvas leftScr = new GameCanvas();
+        leftScr.addKeyListener(leftScr);
         jFrame.add(leftScr);
 
         Panel rightScr = new Panel();
@@ -92,7 +92,8 @@ public class TetrisTest implements Runnable{
     }
 
     public void run(){
-        while (true){
+        leftScr.requestFocus();
+        while (true) {
             try {
                 Thread.sleep(500);
             } catch (InterruptedException e) {
@@ -102,6 +103,7 @@ public class TetrisTest implements Runnable{
             if (Block.isBlockStatus() == false){
                 new Thread(new Block(leftScr)).start();
             }
+
         }
 
     }

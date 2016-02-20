@@ -1,21 +1,26 @@
 package Tetris;
 
 import java.awt.*;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 
 /**
  * Created by runyyf on 16/2/15.
  */
-public class GameCanvas extends Canvas {
+public class GameCanvas extends Canvas implements KeyListener{
     static int canvasArray[][]= new int [20][20];
-    int rowNum ;
-    int columnNum;
-    int unitSize;
+    Block blockKeyMode = new Block(this);
+
+    private int rowNum ;
+    private int columnNum;
+    private int unitSize;
 
     GameCanvas(){
         rowNum = 15;
-        columnNum = 12;
+        columnNum = 10;
         unitSize = 30;
 
+        //this.addKeyListener(this);
         //初始化数组
         for (int i = 0;i<20;i++){
             for (int j = 0;j<20;j++){
@@ -25,6 +30,17 @@ public class GameCanvas extends Canvas {
 
     }
 
+    public int getRowNum(){
+        return rowNum;
+    }
+
+    public int getColumnNum(){
+        return columnNum;
+    }
+
+    public int getUnitSize(){
+        return unitSize;
+    }
 
     public void paint(Graphics g) {
         for (int i = 0; i < rowNum; i++)
@@ -49,11 +65,44 @@ public class GameCanvas extends Canvas {
         g.fill3DRect(col * unitSize, getSize().height - (row + 1) * unitSize,
                 unitSize, unitSize, true);
 
+        canvasArray[row][col] = type;
+
         g.dispose();
     }
 
     public void setUnitState(int row,int column,int state){
         //System.out.println(row+"   "+column+"   "+state);
         canvasArray[row][column] = state;
+    }
+
+
+    public void keyPressed(KeyEvent e){
+        int keyValue = e.getKeyCode();
+        switch (keyValue){
+            case KeyEvent.VK_LEFT:
+                blockKeyMode.moveBlockLeft();
+                break;
+            case KeyEvent.VK_RIGHT:
+                blockKeyMode.moveBlockRight();
+                break;
+            case KeyEvent.VK_UP:
+                System.out.println("333333333333");
+                break;
+            case KeyEvent.VK_DOWN:
+                System.out.println("444444444444");
+                break;
+            default:
+                break;
+
+        }
+
+    }
+
+    public void keyReleased(KeyEvent event){
+
+    }
+
+    public void keyTyped(KeyEvent event){
+
     }
 }
